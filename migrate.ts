@@ -1,19 +1,6 @@
-import { Sequelize } from 'sequelize';
 import { Umzug, SequelizeStorage } from 'umzug';
 import * as path from 'path';
-import { dbConfigs } from './src/configs/db.configs';
-
-const env = process.env.NODE_ENV || 'development';
-const dbConfig = dbConfigs[env as keyof typeof dbConfigs];
-
-const sequelize = dbConfig.use_env_variable
-  ? new Sequelize(process.env[dbConfig.use_env_variable]!, dbConfig)
-  : new Sequelize(
-      dbConfig.database,
-      dbConfig.username,
-      dbConfig.password,
-      dbConfig,
-    );
+import sequelize from './src/configs/db.configs';
 
 const importMigration = async (migrationPath: string) => {
   const migration = await import(migrationPath);
