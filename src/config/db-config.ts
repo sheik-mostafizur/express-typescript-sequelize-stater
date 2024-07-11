@@ -1,4 +1,6 @@
 import { Dialect } from 'sequelize';
+import { config as dotenvConfig } from 'dotenv';
+dotenvConfig();
 
 interface DbConfig {
   username: string;
