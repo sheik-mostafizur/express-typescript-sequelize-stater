@@ -1,7 +1,3 @@
-Certainly! Here's an improved markdown text for your GitHub repository:
-
----
-
 ## How to Create Sequelize Database Models with TypeScript
 
 ### Step-by-Step Guide
