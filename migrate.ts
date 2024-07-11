@@ -22,6 +22,29 @@ const umzug = new Umzug({
       };
     },
   },
+  seeders: {
+    glob: path.join(__dirname, 'src/database/seeders/*.ts'),
+    resolve: async ({
+      name,
+      path: seederPath,
+      context,
+    }: MigrationParams): Promise<{
+      name: string;
+      up: () => Promise<void>;
+      down: () => Promise<void>;
+    }> => {
+      if (!seederPath) {
+        throw new Error(`Seeder path for ${name} is undefined`);
+      }
+
+      const seeder = await importSeeder(seederPath);
+      return {
+        name,
+        up: async () => seeder.up(context),
+        down: async () => seeder.down(context),
+      };
+    },
+  },
   context: sequelize.getQueryInterface(),
   storage: new SequelizeStorage({ sequelize }),
   logger: console,
@@ -30,6 +53,8 @@ const umzug = new Umzug({
 (async () => {
   try {
     await umzug.up();
+    await umzug.runAs({ migrations: false, seeders: true }); // Run seeders
+
     console.log('Migrations completed');
   } catch (error) {
     console.error(error);
