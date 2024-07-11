@@ -1,5 +1,5 @@
-import { Model, DataTypes, Sequelize } from 'sequelize';
-
+import sequelize from '@/config/db-connect';
+import { Model, DataTypes } from 'sequelize';
 interface TodoAttributes {
   id?: number;
   title: string;
@@ -20,28 +20,26 @@ class Todo extends Model<TodoAttributes> implements TodoAttributes {
   }
 }
 
-export const initTodoModel = (sequelize: Sequelize) => {
-  Todo.init(
-    {
-      id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      completed: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-      },
+Todo.init(
+  {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    {
-      sequelize,
-      modelName: 'Todo',
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-  );
+    completed: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize,
+    modelName: 'Todo',
+  },
+);
 
-  return Todo;
-};
+export default Todo;
