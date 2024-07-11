@@ -1,16 +1,33 @@
 import { Umzug, SequelizeStorage } from 'umzug';
 import * as path from 'path';
+import { QueryInterface } from 'sequelize';
 import sequelize from './src/configs/db.configs';
 
+// Function to import migrations dynamically
 const importMigration = async (migrationPath: string) => {
   const migration = await import(migrationPath);
   return migration.default;
 };
 
-const umzug = new Umzug({
+// Function to import seeders dynamically
+const importSeeder = async (seederPath: string) => {
+  const seeder = await import(seederPath);
+  return seeder.default;
+};
+
+// Umzug instance for migrations
+const migrationUmzug = new Umzug({
   migrations: {
     glob: path.join(__dirname, 'src/database/migrations/*.ts'),
-    resolve: ({ name, path: migrationPath, context }) => {
+    resolve: ({
+      name,
+      path: migrationPath,
+      context,
+    }: {
+      name: string;
+      path?: string;
+      context: QueryInterface;
+    }) => {
       if (!migrationPath) {
         throw new Error(`Migration path for ${name} is undefined`);
       }
@@ -22,26 +39,32 @@ const umzug = new Umzug({
       };
     },
   },
-  seeders: {
+  context: sequelize.getQueryInterface(),
+  storage: new SequelizeStorage({ sequelize }),
+  logger: console,
+});
+
+// Umzug instance for seeders
+const seederUmzug = new Umzug({
+  migrations: {
     glob: path.join(__dirname, 'src/database/seeders/*.ts'),
-    resolve: async ({
+    resolve: ({
       name,
       path: seederPath,
       context,
-    }: MigrationParams): Promise<{
+    }: {
       name: string;
-      up: () => Promise<void>;
-      down: () => Promise<void>;
-    }> => {
+      path?: string;
+      context: QueryInterface;
+    }) => {
       if (!seederPath) {
         throw new Error(`Seeder path for ${name} is undefined`);
       }
 
-      const seeder = await importSeeder(seederPath);
       return {
         name,
-        up: async () => seeder.up(context),
-        down: async () => seeder.down(context),
+        up: async () => (await importSeeder(seederPath)).up(context),
+        down: async () => (await importSeeder(seederPath)).down(context),
       };
     },
   },
@@ -50,15 +73,16 @@ const umzug = new Umzug({
   logger: console,
 });
 
+// Running migrations and seeders
 (async () => {
   try {
-    await umzug.up();
-    await umzug.runAs({ migrations: false, seeders: true }); // Run seeders
+    await migrationUmzug.up(); // Run migrations
+    await seederUmzug.up(); // Run seeders
 
-    console.log('Migrations completed');
+    console.log('Migrations and Seeders completed');
   } catch (error) {
-    console.error(error);
+    console.error('Error running migrations and seeders:', error);
   } finally {
-    await sequelize.close();
+    await sequelize.close(); // Close Sequelize connection
   }
 })();

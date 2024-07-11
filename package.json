@@ -10,6 +10,7 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
     "db:migrate": "ts-node migrate.ts",
+    "db:seed": "npx sequelize-cli db:seed:all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
