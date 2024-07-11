@@ -22,9 +22,9 @@ After generating the model, update the file extensions to TypeScript:
 Execute the migration command to apply changes to your database:
 
 ```bash
-pnpm run migrate
+pnpm run db:migrate
 # or
-npm run migrate
+npm run db:migrate
 ```
 
 ### Notes
