@@ -1,22 +1,18 @@
 import sequelize from '@/configs/db.configs';
 import { Model, DataTypes } from 'sequelize';
-interface TodoAttributes {
-  id?: number;
-  title: string;
-  completed: boolean;
-}
 
-class Todo extends Model<TodoAttributes> implements TodoAttributes {
+class Todo extends Model {
   public id!: number;
   public title!: string;
+  public description!: string;
   public completed!: boolean;
 
-  // timestamps!
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
+  // Define associations here
   static associate(models: any) {
-    // define association here
+    // associations can be defined here
   }
 }
 
@@ -28,17 +24,22 @@ Todo.init(
       primaryKey: true,
     },
     title: {
-      type: DataTypes.STRING,
+      type: new DataTypes.STRING(128),
+      allowNull: false,
+    },
+    description: {
+      type: new DataTypes.STRING(128),
       allowNull: false,
     },
     completed: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      defaultValue: false,
     },
   },
   {
     sequelize,
     modelName: 'Todo',
+    tableName: 'Todos',
   },
 );
 

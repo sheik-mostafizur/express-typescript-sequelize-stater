@@ -18,6 +18,7 @@ module.exports = {
           firstName: 'John',
           lastName: 'Doe',
           email: 'john@gmail.com',
+          gender: 'm',
           createdAt: new Date(),
           updatedAt: new Date(),
         },

@@ -13,6 +13,9 @@ export default {
       title: {
         type: DataTypes.STRING,
       },
+      description: {
+        type: DataTypes.STRING,
+      },
       completed: {
         type: DataTypes.BOOLEAN,
       },
