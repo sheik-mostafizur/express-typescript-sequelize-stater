@@ -6,6 +6,7 @@ class Todo extends Model {
   public title!: string;
   public description!: string;
   public completed!: boolean;
+  public user_id!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -13,6 +14,10 @@ class Todo extends Model {
   // Define associations here
   static associate(models: any) {
     // associations can be defined here
+    Todo.belongsTo(models.User, {
+      foreignKey: 'user_id',
+      as: 'user',
+    });
   }
 }
 
@@ -34,6 +39,14 @@ Todo.init(
     completed: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
     },
   },
   {
