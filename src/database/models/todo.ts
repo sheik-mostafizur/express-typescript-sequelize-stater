@@ -1,4 +1,4 @@
-import sequelize from '@/config/db-connect';
+import sequelize from '@/configs/db.configs';
 import { Model, DataTypes } from 'sequelize';
 interface TodoAttributes {
   id?: number;

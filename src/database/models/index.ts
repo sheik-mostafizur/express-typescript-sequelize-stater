@@ -1,22 +1,26 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { Sequelize, DataTypes } from 'sequelize';
-import config from '@/config/db-config';
+import { dbConfigs } from '@/configs/db.configs';
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const dbConfig = config[env as keyof typeof config];
+const dbConfig = dbConfigs[env as keyof typeof dbConfigs];
 const db: any = {};
 
 let sequelize: Sequelize;
 if (dbConfig.use_env_variable) {
   sequelize = new Sequelize(process.env[dbConfig.use_env_variable]!, dbConfig);
 } else {
-  sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, dbConfig);
+  sequelize = new Sequelize(
+    dbConfig.database,
+    dbConfig.username,
+    dbConfig.password,
+    dbConfig,
+  );
 }
 
-fs
-  .readdirSync(__dirname)
+fs.readdirSync(__dirname)
   .filter(file => {
     return (
       file.indexOf('.') !== 0 &&
@@ -26,7 +30,10 @@ fs
     );
   })
   .forEach(file => {
-    const model = require(path.join(__dirname, file)).default(sequelize, DataTypes);
+    const model = require(path.join(__dirname, file)).default(
+      sequelize,
+      DataTypes,
+    );
     db[model.name] = model;
   });
 

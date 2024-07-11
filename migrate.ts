@@ -1,10 +1,10 @@
 import { Sequelize } from 'sequelize';
 import { Umzug, SequelizeStorage } from 'umzug';
 import * as path from 'path';
-import config from './src/config/db-config';
+import { dbConfigs } from './src/configs/db.configs';
 
 const env = process.env.NODE_ENV || 'development';
-const dbConfig = config[env as keyof typeof config];
+const dbConfig = dbConfigs[env as keyof typeof dbConfigs];
 
 const sequelize = dbConfig.use_env_variable
   ? new Sequelize(process.env[dbConfig.use_env_variable]!, dbConfig)

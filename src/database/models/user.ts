@@ -1,4 +1,4 @@
-import sequelize from '@/config/db-connect';
+import sequelize from '@/configs/db.configs';
 import { Model, DataTypes } from 'sequelize';
 
 class User extends Model {
@@ -34,7 +34,7 @@ User.init(
   {
     sequelize,
     tableName: 'Users',
-  }
+  },
 );
 
 export default User;
