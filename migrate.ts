@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import { Umzug, SequelizeStorage } from 'umzug';
 import * as path from 'path';
-import config from './src/config/database';
+import config from './src/config/db-config';
 
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env as keyof typeof config];

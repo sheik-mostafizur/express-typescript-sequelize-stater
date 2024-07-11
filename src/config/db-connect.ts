@@ -1,5 +1,4 @@
-// db-connect.ts
-
+import { Sequelize } from 'sequelize';
 import { config } from 'dotenv';
 config(); // Load environment variables from .env file
 
@@ -31,9 +30,6 @@ const databaseUrl =
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 export { dbConfig, databaseUrl, port };
-
-// Initialize Sequelize
-import { Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize(databaseUrl || '', {
   dialect: dbConfig.dialect as 'mysql' | 'postgres' | 'sqlite' | 'mariadb',
