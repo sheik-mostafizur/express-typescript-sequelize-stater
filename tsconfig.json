@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"],
+      "@/api/*": ["api/*"],
+      "@/config/*": ["config/*"],
+      "@/db/*": ["db/*"],
+      "@/models/*": ["models/*"],
+      "@/controllers/*": ["controllers/*"],
+      "@/routes/*": ["routes/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/database/migrations/20240710231609-create-user.ts", "src/database/models/index.ts", "src/database/models/user.ts"],
+  "exclude": ["node_modules"]
+}
