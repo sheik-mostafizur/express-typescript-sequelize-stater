@@ -31,3 +31,23 @@ npm run db:migrate
 
 - Ensure your `tsconfig.json` is configured correctly to compile TypeScript files.
 - Adjust Sequelize typings or configurations in TypeScript as per your project requirements.
+
+## How to Create Seeders
+
+### Step-by-Step Guide
+
+#### 1. Generate the Sequelize Seeders
+
+To create a seeder named `User`, run the following command:
+
+```bash
+npx sequelize-cli seed:generate --name demo-user
+```
+
+This will create a new file in the `seeders` directory.
+
+#### 2. Modify the Seeders
+
+1. Navigate to the `seeders` directory.
+2. Rename the generated JavaScript file to a TypeScript file (change `.js` to `.ts`).
+3. Open the file and add the necessary data for seeding.
