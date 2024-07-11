@@ -1,32 +1,19 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Sequelize, DataTypes } from 'sequelize';
-import { dbConfigs } from '@/configs/db.configs';
+import { DataTypes } from 'sequelize';
+import sequelize from '@/configs/db.configs';
 
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const dbConfig = dbConfigs[env as keyof typeof dbConfigs];
 const db: any = {};
 
-let sequelize: Sequelize;
-if (dbConfig.use_env_variable) {
-  sequelize = new Sequelize(process.env[dbConfig.use_env_variable]!, dbConfig);
-} else {
-  sequelize = new Sequelize(
-    dbConfig.database,
-    dbConfig.username,
-    dbConfig.password,
-    dbConfig,
-  );
-}
-
+// Read models from current directory and load them into Sequelize
 fs.readdirSync(__dirname)
   .filter(file => {
     return (
       file.indexOf('.') !== 0 &&
       file !== basename &&
-      file.slice(-3) === '.ts' &&
-      file.indexOf('.test.ts') === -1
+      file.slice(-3) === '.ts' && // Ensure it's a TypeScript file
+      file.indexOf('.test.ts') === -1 // Exclude test files if any
     );
   })
   .forEach(file => {
@@ -37,13 +24,14 @@ fs.readdirSync(__dirname)
     db[model.name] = model;
   });
 
+// Apply associations if defined
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
 });
 
+// Assign Sequelize instance and class to the db object
 db.sequelize = sequelize;
-db.Sequelize = Sequelize;
 
 export default db;
