@@ -8,7 +8,7 @@ const config = {
     password: process.env.DB_PASS || '',
     database: process.env.DB_NAME || 'express_db_dev',
     host: process.env.DB_HOST || '127.0.0.1',
-    dialect: 'mysql',
+    dialect: process.env.DB_DIALECT || 'mysql',
   },
   // Other environments (production, test, etc.)
 };
