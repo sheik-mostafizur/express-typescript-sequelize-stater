@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { DataTypes } from 'sequelize';
+import { Sequelize, DataTypes } from 'sequelize';
 import sequelize from '@/configs/db.configs';
 
 const basename = path.basename(__filename);
-const db: any = {};
+const db: { [key: string]: any } = {};
 
-// Read models from current directory and load them into Sequelize
+// Read models from the current directory and load them into Sequelize
 fs.readdirSync(__dirname)
   .filter(file => {
     return (
@@ -17,10 +17,10 @@ fs.readdirSync(__dirname)
     );
   })
   .forEach(file => {
-    const model = require(path.join(__dirname, file)).default(
-      sequelize,
-      DataTypes,
-    );
+    const model = require(path.join(__dirname, file)).default;
+    if (typeof model.init === 'function') {
+      model.init(sequelize, DataTypes);
+    }
     db[model.name] = model;
   });
 
@@ -33,5 +33,6 @@ Object.keys(db).forEach(modelName => {
 
 // Assign Sequelize instance and class to the db object
 db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
 export default db;

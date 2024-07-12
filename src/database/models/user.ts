@@ -10,6 +10,14 @@ class User extends Model {
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  static associate(models: any) {
+    // define association here
+    User.hasMany(models.Todo, {
+      foreignKey: 'user_id',
+      as: 'todos',
+    });
+  }
 }
 
 User.init(
